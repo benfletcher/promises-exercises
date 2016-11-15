@@ -25,20 +25,19 @@ const getArtist = function(name) {
         type: 'artist'
     };
     return getFromApi(endpoint, query).then(function(item) {
-        artist = item.artists.items[0]
-        return artist;
-    }).then(function(item) {
-        let id = item.id;
+        artist = item.artists.items[0];
+ 
+        let id = artist.id;
         let endpoint = `artists/${id}/related-artists/`;
         let query = {};
         return getFromApi(endpoint, query);
 
     }).then(function(item) {
         artist.related = item.artists;
-        return artist;
-    }).then(function(item) {
-        let relatedArtists = item.related;
+ 
+        let relatedArtists = artist.related;
         let fetchArray = [];
+ 
         relatedArtists.forEach(function(related) {
             let id = related.id;
             let endpoint = `artists/${id}/top-tracks`;

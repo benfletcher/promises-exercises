@@ -7,6 +7,7 @@ const getFromApi = function(endpoint, query) {
     };
     // console.log(url);
     return fetch(url).then(function(response) {
+        console.log(response);
         if (response.status < 200 || response.status >= 300) {
             return Promise.reject(response.statusText);
         }
@@ -54,7 +55,7 @@ const getArtist = function(name) {
         tracks.forEach(function(relatedTracks, index) {
             artist.related[index].tracks = relatedTracks.tracks;
         });
-        console.log(artist);
+        // console.log(artist);
         return artist;
     }).catch(function(err) {
         throw Error(err);

@@ -5,7 +5,7 @@ const getFromApi = function(endpoint, query) {
     if (queryString) {
         url += '?' + queryString;
     };
-
+    // console.log(url);
     return fetch(url).then(function(response) {
         if (response.status < 200 || response.status >= 300) {
             return Promise.reject(response.statusText);
@@ -38,9 +38,9 @@ const getArtist = function(name) {
     }
 
 const getRelatedArtists = function(id) {
-        let endpoint = `artists/${id}/related-artists`;
+        let endpoint = `artists/${id}/related-artists/`;
         let query = {
-            limit: 5,
+            // limit: 5,
         };
         return getFromApi(endpoint, query).then(function(item) {
             console.log(arguments);

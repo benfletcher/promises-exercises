@@ -29,14 +29,17 @@ const getArtist = function(name) {
         return artist;
     }).then(function(item) {
         let id = item.id;
-        return (getRelatedArtists(id));
-    }).then(function (item) {
+        let endpoint = `artists/${id}/related-artists/`;
+        let query = {};
+        return getFromApi(endpoint, query);
+
+    }).then(function(item) {
+        artist.related = item.artists;
+        return artist;
+    }).then(function(item) {
         let relatedArtists = item.related;
         let fetchArray = [];
-
-        // [function () {fetch('url1')}, function () {fetch('url1')},....]
-
-        relatedArtists.forEach(function (related) {
+        relatedArtists.forEach(function(related) {
             let id = related.id;
             let endpoint = `artists/${id}/top-tracks`;
             let query = {
@@ -48,26 +51,13 @@ const getArtist = function(name) {
         let promiseAll = Promise.all(fetchArray);
         return promiseAll;
 
-    }).then(function(tracks){
+    }).then(function(tracks) {
         tracks.forEach(function(relatedTracks, index) {
             artist.related[index].tracks = relatedTracks.tracks;
-            });
+        });
         console.log(artist);
         return artist;
     }).catch(function(err) {
         throw Error(err);
     });
 }
-
-const getRelatedArtists = function(id) {
-    let endpoint = `artists/${id}/related-artists/`;
-    let query = {
-        
-            };
-    return getFromApi(endpoint, query).then(function(item) {
-        // console.log(arguments);
-        artist.related = item.artists;
-        return artist;
-    });
-}
-

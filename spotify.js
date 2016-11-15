@@ -1,7 +1,7 @@
-var getFromApi = function(endpoint, query) {
-    var url = 'https://api.spotify.com/v1/' + endpoint;
+const getFromApi = function(endpoint, query) {
+    let url = 'https://api.spotify.com/v1/' + endpoint;
 
-    var queryString = Qs.stringify(query);
+    let queryString = Qs.stringify(query);
     if (queryString) {
         url += '?' + queryString;
     };
@@ -15,7 +15,28 @@ var getFromApi = function(endpoint, query) {
 };
 
 
-var artist;
-var getArtist = function(name) {
-    // Edit me!
+let artist;
+
+const getArtist = function(name) {
+    let endpoint = "search";
+    let query = {
+        q: name,
+        limit: 1,
+        type: 'artist'
+    };
+
+
+    return getFromApi(endpoint, query).then(function (item) {
+            console.log(arguments);
+            
+            artist = item.artists.items[0]
+
+            return artist;
+
+        }).catch(function (err) {
+            
+            throw Error(err);
+        
+        });
 };
+

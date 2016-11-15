@@ -38,25 +38,22 @@ const getArtist = function(name) {
 
         relatedArtists.forEach(function (related) {
             let id = related.id;
-            let url = `https://api.spotify.com/v1/artists/${id}/top-tracks/?country=US`;
-            let fetchFunc = function () {
-                fetch(url);
-            }
-            console.log(fetchFunc);
-
-            fetchArray.push(fetch(url));
+            let endpoint = `artists/${id}/top-tracks`;
+            let query = {
+                country: "US"
+            };
+            fetchArray.push(getFromApi(endpoint, query));
         });
-
-
 
         let promiseAll = Promise.all(fetchArray);
-        promiseAll.then(function (responses) {
-            console.log(arguments);
-        });
+        return promiseAll;
 
-        //artist[0-19].related.tracks = "something";
-
-        return item;
+    }).then(function(tracks){
+        tracks.forEach(function(relatedTracks, index) {
+            artist.related[index].tracks = relatedTracks.tracks;
+            });
+        console.log(artist);
+        return artist;
     }).catch(function(err) {
         throw Error(err);
     });
@@ -65,14 +62,12 @@ const getArtist = function(name) {
 const getRelatedArtists = function(id) {
     let endpoint = `artists/${id}/related-artists/`;
     let query = {
-        // limit: 5,
-    };
+        
+            };
     return getFromApi(endpoint, query).then(function(item) {
         // console.log(arguments);
         artist.related = item.artists;
         return artist;
-    }).catch(function(err) {
-        throw Error(err);
     });
 }
 
